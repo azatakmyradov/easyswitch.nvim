@@ -148,8 +148,8 @@ M.toggle = function()
         },
         position = "50%",
         size = {
-            width = "80%",
-            height = "60%",
+            width = "30%",
+            height = "50%",
         },
     })
 

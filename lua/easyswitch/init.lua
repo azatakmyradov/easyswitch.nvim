@@ -1,5 +1,6 @@
 local M = {
-    config = require("easyswitch.config")
+    config = require("easyswitch.config"),
+    available_plugins = {}
 }
 
 M._get_plugins = function()
@@ -15,20 +16,22 @@ end
 M.refresh_buf = function()
     local popup = M.config.popup
 
-    local plugins_table = { "*Disabled Plugins*:" }
+    local to_be_rendered = { "*Disabled Plugins*:" }
     for _, plugin in ipairs(M.get()) do
-        table.insert(plugins_table, plugin)
+        table.insert(to_be_rendered, plugin)
     end
 
-    table.insert(plugins_table, "")
+    table.insert(to_be_rendered, "")
 
-    table.insert(plugins_table, "*Enabled Plugins*:")
-    for _, plugin in ipairs(M._get_plugins()) do
-        table.insert(plugins_table, plugin)
+    table.insert(to_be_rendered, "*Enabled Plugins*:")
+    for _, plugin in ipairs(M.available_plugins) do
+        if M.is_active(plugin) then
+            table.insert(to_be_rendered, plugin)
+        end
     end
 
     -- set content
-    vim.api.nvim_buf_set_lines(popup.bufnr, 0, #plugins_table, false, plugins_table)
+    vim.api.nvim_buf_set_lines(popup.bufnr, 0, #to_be_rendered, false, to_be_rendered)
     local opts = {}
 
     vim.api.nvim_buf_set_keymap(popup.bufnr, "n", "d", ":lua require('easyswitch').remove()<CR>", opts)
@@ -68,8 +71,7 @@ end
 M.add = function()
     local name = vim.api.nvim_get_current_line()
 
-    local available_plugins = M._get_plugins()
-    if not vim.tbl_contains(available_plugins, name) then
+    if not vim.tbl_contains(M.available_plugins, name) then
         return
     end
 
@@ -104,6 +106,10 @@ end
 
 M.is_disabled = function(name)
     local current = M.get()
+
+    if vim.tbl_contains(M.available_plugins, name) == false then
+        table.insert(M.available_plugins, name)
+    end
 
     for i, plugin in ipairs(current) do
         if plugin == name then

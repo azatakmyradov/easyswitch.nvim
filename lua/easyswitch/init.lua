@@ -67,7 +67,6 @@ end
 
 M.add = function()
     local name = vim.api.nvim_get_current_line()
-    local skip = { "", "*Disabled Plugins*:", "*Enabled Plugins*:" }
 
     local available_plugins = M._get_plugins()
     if not vim.tbl_contains(available_plugins, name) then
@@ -159,10 +158,48 @@ M.toggle = function()
     end)
 end
 
-M.new = function(plugins)
-    print(vim.inspect(plugins))
+M._get_plugin_name = function(plugin)
+    local name
 
-    return plugins
+    for _, value in ipairs(plugin) do
+        if type(value) == "string" then
+            name = value
+            break
+        end
+    end
+
+    if name == nil then
+        return nil
+    end
+
+    local slash_index = name:find("/[^/]*$")
+    name = name:sub(slash_index + 1)
+
+    return name
+end
+
+M.new = function(plugins)
+    local plugin_name = M._get_plugin_name(plugins)
+
+    if plugin_name ~= nil then
+        if M.is_disabled(plugin_name) then
+            return {}
+        end
+
+        return plugins
+    end
+
+    local enabled_plugins = {}
+
+    for _, plugin in ipairs(plugins) do
+        local name = M._get_plugin_name(plugin)
+
+        if name ~= nil and M.is_active(name) then
+            table.insert(enabled_plugins, plugin)
+        end
+    end
+
+    return enabled_plugins
 end
 
 return M

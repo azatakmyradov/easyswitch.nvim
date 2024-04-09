@@ -13,6 +13,23 @@
 ```
 
 # Usage
+
+## Multiple plugins
+You can wrap an object with `new` method from plugin:
+```lua
+return require('easyswitch').new({
+    { 'github/copilot.vim', },
+    { 'stevearc/conform.nvim', }
+})
+
+-- OR --
+
+return require('easyswitch').new({
+    'github/copilot.vim',
+})
+```
+
+## Single plugin
 1. Add *cond* option to lazy plugins that you want to control. Ex:
 ```lua
 {
@@ -24,9 +41,11 @@
 
 2. Then you can enable/disable that plugin using this command
 ```lua
-:lua require('easyswith').open()
+:lua require('easyswith').toggle()
 ```
 
 # Keymaps
-- *a* - to enable plugin
-- *b* - to disable plugin
+
+## Normal mode:
+- `a` - to enable plugin
+- `b` - to disable plugin

@@ -33,6 +33,7 @@ M.refresh_buf = function()
 
     vim.api.nvim_buf_set_keymap(popup.bufnr, "n", "d", ":lua require('easyswitch').remove()<CR>", opts)
     vim.api.nvim_buf_set_keymap(popup.bufnr, "n", "a", ":lua require('easyswitch').add()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(popup.bufnr, "n", "<Esc>", ":lua require('easyswitch').toggle()<CR>", opts)
 end
 
 M.get = function()
@@ -118,7 +119,13 @@ M.is_active = function(name)
     return not M.is_disabled(name)
 end
 
-M.open = function()
+M.toggle = function()
+    if M.config.popup ~= nil then
+        M.config.popup:unmount()
+        M.config.popup = nil
+        return
+    end
+
     local Popup = require("nui.popup")
     local event = require("nui.utils.autocmd").event
 

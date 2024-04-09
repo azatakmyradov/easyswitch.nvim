@@ -1,5 +1,7 @@
 # EasySwitch
 
+This is a simple plugin to turn to add a functionality to turn on or off specific plugin without updating the neovim config
+
 *THIS IS WORK IN PROGRESS*
 
 # Install

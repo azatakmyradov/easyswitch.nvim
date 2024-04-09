@@ -16,14 +16,14 @@ end
 M.refresh_buf = function()
     local popup = M.config.popup
 
-    local to_be_rendered = { "*Disabled Plugins*:" }
+    local to_be_rendered = { "*[D]isabled Plugins*:" }
     for _, plugin in ipairs(M.get()) do
         table.insert(to_be_rendered, plugin)
     end
 
     table.insert(to_be_rendered, "")
 
-    table.insert(to_be_rendered, "*Enabled Plugins*:")
+    table.insert(to_be_rendered, "*[E]nabled Plugins*:")
     for _, plugin in ipairs(M.available_plugins) do
         if M.is_active(plugin) then
             table.insert(to_be_rendered, plugin)
@@ -34,8 +34,10 @@ M.refresh_buf = function()
     vim.api.nvim_buf_set_lines(popup.bufnr, 0, #to_be_rendered, false, to_be_rendered)
     local opts = {}
 
-    vim.api.nvim_buf_set_keymap(popup.bufnr, "n", "d", ":lua require('easyswitch').remove()<CR>", opts)
-    vim.api.nvim_buf_set_keymap(popup.bufnr, "n", "a", ":lua require('easyswitch').add()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(popup.bufnr, "n", "D", ":lua require('easyswitch').add()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(popup.bufnr, "n", "d", ":lua require('easyswitch').add()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(popup.bufnr, "n", "e", ":lua require('easyswitch').remove()<CR>", opts)
+    vim.api.nvim_buf_set_keymap(popup.bufnr, "n", "E", ":lua require('easyswitch').remove()<CR>", opts)
     vim.api.nvim_buf_set_keymap(popup.bufnr, "n", "<Esc>", ":lua require('easyswitch').toggle()<CR>", opts)
 end
 

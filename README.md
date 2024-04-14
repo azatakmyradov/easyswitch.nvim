@@ -50,5 +50,5 @@ return require('easyswitch').new({
 # ✨ Keymaps
 
 ## Normal mode:
-- `a` - to enable plugin
-- `b` - to disable plugin
+- `E` - to enable plugin
+- `D` - to disable plugin

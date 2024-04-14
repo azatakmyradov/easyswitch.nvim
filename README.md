@@ -1,10 +1,10 @@
-# EasySwitch
+# easyswitch.nvim
 
 This is a simple plugin to turn to add a functionality to turn on or off specific plugin without updating the neovim config
 
-*THIS IS WORK IN PROGRESS*
+**THIS IS WORK IN PROGRESS**
 
-# Install
+# 📦 Installation
 ```lua
 { -- Lazy
     "azatakmyradov/easyswitch.nvim",
@@ -14,7 +14,8 @@ This is a simple plugin to turn to add a functionality to turn on or off specifi
 },
 ```
 
-# Usage
+# ⚙️  Configuration
+!!!These can't be done in main **init.lua** file in lazy plugins folder. I recommend creating a **easyswitch.lua** file to store plugins that can be disabled.
 
 ## Multiple plugins
 You can wrap an object with `new` method from plugin:
@@ -46,7 +47,7 @@ return require('easyswitch').new({
 :lua require('easyswith').toggle()
 ```
 
-# Keymaps
+# ✨ Keymaps
 
 ## Normal mode:
 - `a` - to enable plugin

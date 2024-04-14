@@ -16,14 +16,14 @@ end
 M.refresh_buf = function()
     local popup = M.config.popup
 
-    local to_be_rendered = { "*[D]isabled Plugins*:" }
+    local to_be_rendered = { " [D]isabled Plugins:" }
     for _, plugin in ipairs(M.get()) do
         table.insert(to_be_rendered, plugin)
     end
 
     table.insert(to_be_rendered, "")
 
-    table.insert(to_be_rendered, "*[E]nabled Plugins*:")
+    table.insert(to_be_rendered, "󱩓 [E]nabled Plugins*:")
     for _, plugin in ipairs(M.available_plugins) do
         if M.is_active(plugin) then
             table.insert(to_be_rendered, plugin)
@@ -71,6 +71,7 @@ M.set = function(disabled_plugins)
 end
 
 M.add = function()
+    vim.cmd(":set modifiable")
     local name = vim.api.nvim_get_current_line()
 
     if not vim.tbl_contains(M.available_plugins, name) then
@@ -89,12 +90,18 @@ M.add = function()
     M.refresh_buf()
 
     vim.notify("Restart to reload plugins...")
+    vim.cmd(":set nomodifiable")
 end
 
 M.remove = function()
+    vim.cmd(":set modifiable")
     local name = vim.api.nvim_get_current_line()
     local current = M.get()
     local index = M.is_disabled(name)
+
+    if not vim.tbl_contains(M.available_plugins, name) then
+        return
+    end
 
     if index then
         table.remove(current, index)
@@ -104,10 +111,17 @@ M.remove = function()
     M.refresh_buf()
 
     vim.notify("Restart to reload plugins...")
+    vim.cmd(":set nomodifiable")
 end
 
 M.is_disabled = function(name)
     local current = M.get()
+
+    local skip = { " [D]isabled Plugins:", "󱩓 [E]nabled Plugins*:", "" }
+
+    if vim.tbl_contains(skip, name) then
+        return
+    end
 
     if vim.tbl_contains(M.available_plugins, name) == false then
         table.insert(M.available_plugins, name)
@@ -143,7 +157,7 @@ M.toggle = function()
             style = "rounded",
         },
         buf_options = {
-            modifiable = true,
+            modifiable = false,
             readonly = true,
         },
         position = "50%",

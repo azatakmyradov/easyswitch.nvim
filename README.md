@@ -44,7 +44,7 @@ return require('easyswitch').new({
 
 2. Then you can enable/disable that plugin using this command
 ```lua
-:lua require('easyswith').toggle()
+:lua require('easyswitch').toggle()
 ```
 
 # ✨ Keymaps
